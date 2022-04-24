@@ -1,43 +1,6 @@
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
-
-
-def get_line_number(line_start, file_name):
-    with open(file_name) as f:
-        for n, line in enumerate(f):
-            if line.startswith(line_start):
-                return n
-
-
-def strip_punctuation(word):
-    punctuation_chars = ["'", '"', ",", ".", "!", ":", ";", '#', '@', '(', ')']
-    for i in punctuation_chars:
-        word = word.replace(i, "")
-    return word
-
-
-def strip_stopwords(bk_word_lst):
-    with open('stop-words.txt', 'r') as sw:
-        stopwords = [w.strip() for w in sw]
-        for a in stopwords:
-            for w in bk_word_lst:
-                if w == a:
-                    bk_word_lst.remove(w)
-        return bk_word_lst
-
-
-def strip_digits(word_list):
-    for ele in word_list:
-        if ele.isdigit():
-            word_list.remove(ele)
-    return word_list
-
-
-def strip_other(word_list):
-    for e in word_list:
-        if '{' in e or ']' in e:
-            word_list.remove(e)
-    return word_list
+from word_scrub import strip_punctuation, strip_stopwords, strip_other, strip_digits
 
 
 def create_dict(words):
@@ -65,14 +28,14 @@ def plot_cloud(wordcloud):
     plt.show()
 
 
-with open('roots.txt') as f:
+with open('roots.txt', encoding="utf8") as f:
+    f = f.readlines()
     roots_txt = []
     for line in f:
-        wrds = line.split()
-        for word in wrds:
-            roots_txt.append(word)
+        line.split()
+        roots_txt.append(line.strip())
     # get list of lower case words from list of sentences
-    words = [lo_word.lower() for lo_word in roots_txt]
+    words = [lo.lower() for word in roots_txt for lo in word.split()]
     # strip away punctuation from each word in list
     words = [strip_punctuation(word) for word in words]
     # deep clean list, no digits and other
@@ -81,6 +44,11 @@ with open('roots.txt') as f:
     final_count = del_min_vals(counts)
 
     # Generate word cloud
-    wordcloud = WordCloud(max_words=300, random_state=1, background_color='#daa520', collocations=False)
+    wordcloud = WordCloud(max_words=300, random_state=1, background_color='#000000', collocations=False)
     wc = wordcloud.generate_from_frequencies(final_count)
-    plot_cloud(wc)
+    plt.figure( figsize=(10, 5))
+    plt.imshow(wc)
+    plt.axis("off")
+    plt.tight_layout(pad=0)
+    plt.show()
+
