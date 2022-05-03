@@ -14,8 +14,12 @@
           <option name="url" value="http://gitlab.com" />
           <option name="userName" value="parcheesime" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://gitlab.com/parcheesime/wordcloud.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="C:\Users\nunto\PycharmProjects" />
+    <option name="cloneParentDir" value="C:\Users\nunto\PycharmProjects\wordcloud" />
   </component>
 </application>
