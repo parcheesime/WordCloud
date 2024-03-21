@@ -50,4 +50,5 @@ with open('roots.txt', encoding="utf8") as f:
     plt.imshow(wc)
     plt.axis("off")
     plt.tight_layout(pad=0)
+    plt.savefig('cloudimg.png')
     plt.show()
