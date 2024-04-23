@@ -3,30 +3,15 @@
 
 def strip_punctuation(word):
     punctuation_chars = ["'", '"', ",", ".", "!", ":", ";", '#', '@', '(', ')', "'"]
-    for i in punctuation_chars:
-        word = word.replace(i, "")
-    return word
+    return ''.join([c for c in word if c not in punctuation_chars])
 
-
-def strip_stopwords(bk_word_lst):
+def strip_stopwords(word_list):
     with open('stop_words.txt', 'r') as sw:
-        stopwords = [w.strip() for w in sw]
-        for a in stopwords:
-            for w in bk_word_lst:
-                if w == a:
-                    bk_word_lst.remove(w)
-        return bk_word_lst
-
+        stopwords = {w.strip() for w in sw}
+        return [word for word in word_list if word not in stopwords]
 
 def strip_digits(word_list):
-    for ele in word_list:
-        if ele.isdigit():
-            word_list.remove(ele)
-    return word_list
-
+    return [word for word in word_list if not word.isdigit()]
 
 def strip_other(word_list):
-    for e in word_list:
-        if '{' in e or ']' in e:
-            word_list.remove(e)
-    return word_list
+    return [word for word in word_list if not ('{' in word or ']' in word)]

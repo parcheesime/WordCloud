@@ -1,31 +1,11 @@
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 from word_scrub import strip_punctuation, strip_stopwords, strip_other, strip_digits
-
-
-def create_dict(words):
-    counts = dict()
-    for word in words:
-        word = word.lower()
-        counts[word] = counts.get(word, 0) + 1
-    return counts
-
-
-def del_min_vals(dict):
-    delete = []
-    for k, v in dict.items():
-        if v < 50:
-            delete.append(k)
-    for i in delete:
-        del dict[i]
-    return dict
-
-
-def plot_cloud(wordcloud):
-    plt.figure()
-    plt.imshow(wordcloud)
-    plt.axis("off")
-    plt.show()
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+import numpy as np
+import time
+from collections import Counter
 
 
 with open('roots.txt', encoding="utf8") as f:
@@ -36,12 +16,16 @@ with open('roots.txt', encoding="utf8") as f:
         roots_txt.append(line.strip())
     # get list of lower case words from list of sentences
     words = [lo.lower() for word in roots_txt for lo in word.split()]
-    # strip away punctuation from each word in list
+    
+    # Clean words
     words = [strip_punctuation(word) for word in words]
-    # deep clean list, no digits and other
-    words = strip_other(strip_digits(words))
-    counts = create_dict(strip_stopwords(words))
-    final_count = del_min_vals(counts)
+    words = strip_digits(words)
+    words = strip_other(words)
+    words = strip_stopwords(words)
+
+    # Create word count dictionary
+    word_counts = Counter(words)
+    final_count = dict(sorted(word_counts.items(), key=lambda item: item[1], reverse=True)[:50])
 
     # Generate word cloud
     wordcloud = WordCloud(max_words=300, random_state=1, background_color='#000000', collocations=False)
